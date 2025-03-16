@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content" style="background: #fff;">
+    <h1>Написать о проекте</h1>
+    <p>Напиши кратко своей идее, расскажи самое главное</p>
+    <form method="post">
+        <input placeholder="Название..." type="text" name="title" id="title" class="create-input"><br>
+        <textarea placeholder="Описание проекта..." id="text" name="text" class="create-text"></textarea><br>
+        <input type="submit" class="main_button" value="Опубликовать">
+    </form>
+</div>
+{% endblock %}

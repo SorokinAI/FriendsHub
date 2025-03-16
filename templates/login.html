@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content" style="bacground: #fff;">
+    <h1>Войдите</h1>
+    <p>Напиши кратко своей идее, расскажи самое главное</p>
+    <form method="post">
+        <input placeholder="Логин" type="text" name="login" id="login" class="create-input"><br>
+        <input placeholder="Пароль" type="password" name="password" id="password" class="create-input"><br>
+        <input type="submit" class="main_button" value="Войти">
+    </form>
+    <a href="/register">Ещё нет аккаунта? Зарегистрируйтесь!</a>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class=flashes>
+        {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}
