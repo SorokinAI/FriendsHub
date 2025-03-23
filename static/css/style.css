@@ -125,7 +125,8 @@ main {
     margin-top: 17px;
 }
 
-.sign_in {
+.digital-wind {
+    margin-top: 5px;
     margin-left: auto;
     margin-right: 50px;
     font-size: 15px;
@@ -168,7 +169,7 @@ main {
     width: 1000px;
     margin-left: auto;
     margin-right: auto;
-    padding: 100px 50px 50px 50px;
+    padding: 100px 50px 300px 50px;
 }
 
 .content-block {
@@ -183,9 +184,22 @@ main {
 .author-name {
     font-size: 20px;
     font-weight: 700;
+    color: black;
 }
 
-.post-data {
+.author-name a {
+    font-size: 20px;
+    font-weight: 700;
+    color: black;
+    text-decoration: none;
+}
+
+.author-name a:hover {
+    color: #238636;
+    text-decoration: underline;
+}
+
+.post-date {
     margin-top: -20px;
     font-size: 14px;
     color: #818c99
@@ -200,12 +214,12 @@ main {
     margin-right: 20px;
 }
 
-.post-tegs {
+.post-tags {
     display: flex;
     margin-right: 5px;
 }
 
-.post-tegs a {
+.post-tags a {
     border: 2px solid #299e40;
     border-radius: 6px;
     color: #299e40;
@@ -233,6 +247,10 @@ main {
     outline: none;
 }
 
+form {
+    padding-top: 5px;
+}
+
 .create-input {
    width: 70%;
    font-size: 20px;
@@ -240,6 +258,7 @@ main {
    border: 2px solid #A5A5A5;
    border-radius: 4px;
    padding: 4px;
+   margin-bottom: 5px;
 }
 .create-input:focus {
     border: 2px solid #238636;
@@ -254,12 +273,20 @@ main {
     border: 2px solid #A5A5A5;
     border-radius: 4px;
     padding: 4px;
+    margin-bottom: 5px;
 }
 
 .create-text:focus {
     border: 2px solid #238636;
 }
+#send {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
+#DW {
+    width: 200px;
+}
 /* Адаптивная верстка под ноутбуки */
 
 

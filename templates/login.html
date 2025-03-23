@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="content" style="bacground: #fff;">
+<div class="content" style="background: #fff;">
     <h1>Войдите</h1>
-    <p>Напиши кратко своей идее, расскажи самое главное</p>
     <form method="post">
-        <input placeholder="Логин" type="text" name="login" id="login" class="create-input"><br>
-        <input placeholder="Пароль" type="password" name="password" id="password" class="create-input"><br>
-        <input type="submit" class="main_button" value="Войти">
+        <input placeholder="E-mail" type="text" name="email" autocomplete="off" id="login" class="create-input"><br>
+        <input placeholder="Пароль" type="password" name="password" autocomplete="off" id="password" class="create-input"><br>
+        <input type="submit" id="send" class="main_button" value="Войти">
     </form>
     <a href="/register">Ещё нет аккаунта? Зарегистрируйтесь!</a>
     {% with messages = get_flashed_messages(with_categories=true) %}

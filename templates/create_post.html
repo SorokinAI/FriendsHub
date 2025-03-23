@@ -5,9 +5,19 @@
     <h1>Написать о проекте</h1>
     <p>Напиши кратко своей идее, расскажи самое главное</p>
     <form method="post">
-        <input placeholder="Название..." type="text" name="title" id="title" class="create-input"><br>
-        <textarea placeholder="Описание проекта..." id="text" name="text" class="create-text"></textarea><br>
-        <input type="submit" class="main_button" value="Опубликовать">
+        <input placeholder="Название..." type="text" autocomplete="off" name="title" id="title" class="create-input"><br>
+        <input placeholder="Теги для поиска..." type="text" autocomplete="off" name="tags" id="tags" class="create-input"><br>
+        <textarea placeholder="Описание проекта..." id="text" autocomplete="off" name="text" class="create-text"></textarea><br>
+        <input type="submit" id="send" class="main_button" value="Опубликовать">
     </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class=flashes>
+        {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
 </div>
 {% endblock %}

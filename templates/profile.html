@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-        <div class="content">
-            <div class="search-block">
-                <form action="{{ url_for('search_by_tag') }}" method="get">
-                    <input name="tag" placeholder="Найти по тегу..." type="search" autocomplete="off">
-                    <button type="submit" class="main_button">найти</button>
-                </form>
-            </div>
-            {% for post in posts %}
+<div class="content">
+    <div class="content-block">
+        <p class="author-name">{{ user.surname }} {{ user.name }}</p>
+        <p>Telegram: {{ user.telegram_username }}<br>Email: {{ user.email }}</p>
+    </div>
+    {% for post in posts %}
             <div class="content-block">
                 <div class="content-author">
                     <p class="author-name"><a href="/profile/{{ post.ser_id }}">{{ post.author.surname }} {{ post.author.name }}</a></p>
@@ -22,4 +20,5 @@
                     {% endfor %}</div>
             </div>
             {% endfor %}
-        </div>{% endblock %}
+</div>
+{% endblock %}

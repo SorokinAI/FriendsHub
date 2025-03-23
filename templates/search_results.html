@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content">
+    <div class="content-block">
+    <h1>Результаты поиска по тегу "{{ query }}"</h1>
+    </div>
+    {% if posts %}
+        {% for post in posts %}
+    <div class="content-block">
+            <div class="post">
+                <div class="content-author">
+                    <p class="author-name">{{ post.author.surname }} {{ post.author.name }}</p>
+                    <p class="post-date">{{ post.date.date() }}</p>
+                </div>
+                <p class="post-title">{{ post.title }}</p>
+                <p class="post">{{ post.text }}</p>
+                <div class="post-tags">
+                    {% for tag in post.tags %}
+                        <a href="{{ url_for('search_by_tag', tag=tag.name) }}">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+    </div>
+        {% endfor %}
+    {% else %}
+        <p>По вашему запросу ничего не найдено.</p>
+    {% endif %}
+</div>
+{% endblock %}

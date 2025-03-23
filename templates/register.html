@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="content" style="bacground: #fff;">
-    <h1>Войдите</h1>
-    <p>Напиши кратко своей идее, расскажи самое главное</p>
+<div class="content" style="background: #fff;">
+    <h1>Зарегистрируйтесь</h1>
     <form method="post">
-        <input placeholder="Логин" type="text" name="login" id="login" class="create-input"><br>
-        <input placeholder="Имя" type="text" name="name" id="name" class="create-input"><br>
-        <input placeholder="Фамилия" type="text" name="surname" id="surname" class="create-input"><br>
-        <input placeholder="Пароль" type="password" name="password" id="password" class="create-input"><br>
-        <input placeholder="Повторите пароль" type="password" name="password_retype" id="password_retype" class="create-input"><br>
-        <input type="submit" class="main_button" value="Зарегистрироваться">
+        <input placeholder="Email" type="text" autocomplete="off" name="email" id="email" class="create-input"><br>
+        <input placeholder="Имя" type="text" autocomplete="off" name="name" id="name" class="create-input"><br>
+        <input placeholder="Фамилия" type="text" autocomplete="off" name="surname" id="surname" class="create-input"><br>
+        <input placeholder="Профиль телеграмм" type="text" autocomplete="off" name="tg" id="tg" class="create-input"><br>
+        <input placeholder="Пароль" type="password" autocomplete="off" name="password" id="password" class="create-input"><br>
+        <input placeholder="Повторите пароль" type="password" autocomplete="off" name="password_retype" id="password_retype" class="create-input"><br>
+        <input type="submit" id="send" class="main_button" value="Зарегистрироваться">
     </form>
     <a href="/login">Уже есть аккаунт? Войдите!</a>
     {% with messages = get_flashed_messages(with_categories=true) %}
