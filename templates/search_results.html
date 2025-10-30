@@ -10,7 +10,7 @@
     <div class="content-block">
             <div class="post">
                 <div class="content-author">
-                    <p class="author-name">{{ post.author.surname }} {{ post.author.name }}</p>
+                    <p class="author-name"><a href="/profile/{{ post.ser_id }}">{{ post.author.surname }} {{ post.author.name }}</a></p>
                     <p class="post-date">{{ post.date.date() }}</p>
                 </div>
                 <p class="post-title">{{ post.title }}</p>

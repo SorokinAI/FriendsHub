@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 import re
+from mail_valid import evalid
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fh.db'
@@ -43,6 +44,7 @@ class User(db.Model):
 
     def is_anonymous(self):
         return False
+
 
     def get_id(self):
         """Возвращает строковую версию идентификатора."""
@@ -94,6 +96,7 @@ def register():
         email = request.form['email']
         telegram_username = request.form['tg']
         password = request.form['password']
+        password_retype = request.form['password_retype']
 
         symbols_to_remove = ['https://t.me/', 't.me/']
         for symbol in symbols_to_remove:
@@ -106,6 +109,14 @@ def register():
 
         if User.query.filter_by(email=email).first():
             flash(f"Email '{email}' уже зарегистрирован", category="warning")
+            return redirect('/register')
+
+        if not evalid(email):
+            flash(f"Введите адрес email", category="warning")
+            return redirect('/register')
+
+        if password != password_retype:
+            flash(f"Пароли не совпадают", category="warning")
             return redirect('/register')
 
         # Хешируем пароль
@@ -130,7 +141,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
 
     if request.method == 'POST':
         email = request.form['email']
@@ -216,7 +227,7 @@ def profile(user_id):
     return render_template('profile.html', user=user, posts=posts)
 
 
-@app.route('/digital_wind')
+@app.route('/about_us')
 def dw():
     return render_template('digital_wind.html')
 
