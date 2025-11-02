@@ -1,19 +1,23 @@
-from flask import Flask, render_template, request, redirect, flash, url_for, Blueprint
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, redirect, flash, url_for
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
-from werkzeug.security import check_password_hash, generate_password_hash
-from datetime import datetime
+from werkzeug.security import generate_password_hash
 import re
 from mail_valid import evalid
+from models import db
+from admin_panel import setup_admin
+from models import User, Post, Tag, post_tags
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fh.db'
 app.config['SECRET_KEY'] = '123099323hkdsf9932'
-db = SQLAlchemy(app)
+
+db.init_app(app)  # Инициализируем базу данных с приложением
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
+
+setup_admin(app, db)
 
 
 @login_manager.user_loader
@@ -21,67 +25,10 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    surname = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    telegram_username = db.Column(db.String(64))
-    password_hash = db.Column(db.String(128))
-    posts = db.relationship('Post', backref='author', lazy=True)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-
-    def get_id(self):
-        """Возвращает строковую версию идентификатора."""
-        return str(self.id)
-
-
-class Post(db.Model):
-    __tablename__ = 'posts'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
-    text = db.Column(db.Text)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-    ser_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # связь с пользователем
-    tags = db.relationship('Tag', secondary='post_tags',
-                           backref=db.backref('posts', lazy='dynamic'))  # связь с тегами через промежуточную таблицу
-
-    def __repr__(self):
-        return f'Post({self.title}, {self.date})'
-
-
-class Tag(db.Model):
-    __tablename__ = 'tags'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
-
-
-# промежуточная таблица для связи многих ко многим между постами и тегами
-post_tags = db.Table('post_tags',
-                     db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True),
-                     db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True)
-                     )
-
-
 @app.route('/')
 @app.route('/home')
 def index():
-    posts = Post.query.order_by(Post.date.desc()).all()  # вывод всех постов, сортируя по дате публикации
+    posts = Post.query.order_by(Post.date.desc()).all()
     return render_template('index.html', posts=posts)
 
 
@@ -170,7 +117,7 @@ def create_post():
     if request.method == 'POST':
         title = request.form.get('title').strip()
         text = request.form.get('text').strip()
-        tags_str = request.form.get('tags')  # Получаем строку с тегами
+        tags_str = request.form.get('tags')
 
         # Проверяем, заполнены ли поля
         if not title or not text or not tags_str:
@@ -214,10 +161,11 @@ def search_by_tag():
     query = request.args.get('tag')
     if query:
         # Поиск постов по тегу
-        found_posts = Post.query.join(post_tags).join(Tag, post_tags.c.tag_id == Tag.id).filter(Tag.name.ilike(f'%{query}%')).all()
+        found_posts = Post.query.join(post_tags).join(Tag, post_tags.c.tag_id == Tag.id)\
+            .filter(Tag.name.ilike(f'%{query}%')).all()
         return render_template('search_results.html', posts=found_posts, query=query)
     else:
-        return redirect(url_for('index'))  # Если тег не указан, переходим на главную страницу
+        return redirect(url_for('index'))
 
 
 @app.route('/profile/<int:user_id>')
@@ -233,4 +181,6 @@ def dw():
 
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
